@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-n367@&-r8ezf&j=yud=6&1415h15ol+8dbf)uqpvhg28t_jck8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','https://cebu-room-rental-final.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','https://cebu-room-rental-finaloutput.onrender.com']
 
 
 # Application definition
