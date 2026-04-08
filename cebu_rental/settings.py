@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-n367@&-r8ezf&j=yud=6&1415h15ol+8dbf)uqpvhg28t_jck8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://cebu-room-rental-final.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','https://cebu-room-rental-final.onrender.com']
 
 
 # Application definition
@@ -119,8 +119,6 @@ USE_TZ = True
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['YOUR_USERNAME.pythonanywhere.com']
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -132,3 +130,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
+
+if 'RENDER' in os.environ:
+    RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+    if RENDER_EXTERNAL_HOSTNAME:
+        ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
