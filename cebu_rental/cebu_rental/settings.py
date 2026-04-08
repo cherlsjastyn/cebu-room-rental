@@ -116,10 +116,20 @@ USE_I18N = True
 
 USE_TZ = True
 
-MEDIA_URL = '/media/'  # ← Change from '/' to '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'  # ← Add this line
+# Change DEBUG to False for production
+DEBUG = False
 
-# Crispy Forms Configuration
+# Add your PythonAnywhere domain to ALLOWED_HOSTS
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'cjtaneo.pythonanywhere.com']
+
+# Make sure STATIC_ROOT is set (add this line)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Make sure MEDIA settings are correct
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Crispy Forms settings (should already be there)
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Static files (CSS, JavaScript, Images)

@@ -1,0 +1,58 @@
+As a Tenant (Property Owner)
+Register as a Tenant when creating your account
+
+Create a listing by clicking "Add Listing" in the navigation bar
+
+Fill in property details:
+
+Title and description
+
+Property type (Boarding House, Apartment, etc.)
+
+Location (Cebu City or Lapu-Lapu City)
+
+Price per night
+
+Maximum occupants
+
+Amenities (comma-separated)
+
+Upload up to 3 images
+
+Manage your listings from "My Listings" page (Edit/Delete)
+
+Respond to booking requests from the "Bookings" page
+
+Reply to buyer messages from the "Messages" page
+
+As a Buyer (Renter)
+Register as a Buyer when creating your account
+
+Browse listings from the "Listings" page
+
+Filter results by:
+
+Location
+
+Property type
+
+Price range
+
+Number of occupants
+
+View on map by clicking the "Map View" tab
+
+Book a room by clicking "Book This Room" on any listing
+
+Message the tenant using the messaging section on the listing page
+
+Track your bookings from the "Bookings" page
+
+Cancel pending bookings if needed
+
+As Admin
+Go to /admin and log in with superuser credentials
+
+Manage all users, listings, bookings, and messages
+
+Approve or remove content as needed
