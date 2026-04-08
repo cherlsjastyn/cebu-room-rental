@@ -116,20 +116,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Change DEBUG to False for production
+# cebu_rental/settings.py
+
 DEBUG = False
 
-# Add your PythonAnywhere domain to ALLOWED_HOSTS
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'cjtaneo.pythonanywhere.com']
+ALLOWED_HOSTS = ['YOUR_USERNAME.pythonanywhere.com']
 
-# Make sure STATIC_ROOT is set (add this line)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Make sure MEDIA settings are correct
+STATIC_URL = '/static/'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Crispy Forms settings (should already be there)
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Static files (CSS, JavaScript, Images)
