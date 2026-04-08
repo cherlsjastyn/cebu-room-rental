@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="my-4">Map View - Find Rooms in Cebu</h1>
+    <div id="map" style="height: 600px; width: 100%;"></div>
+</div>
+
+<!-- Leaflet CSS and JS (Free alternative to Google Maps) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script>
+    // Initialize map centered on Cebu
+    var map = L.map('map').setView([10.3157, 123.8854], 12);
+    
+    // Add tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    // Fetch listings from API
+    fetch('/api/listings/')
+        .then(response => response.json())
+        .then(listings => {
+            listings.forEach(listing => {
+                var marker = L.marker([listing.latitude, listing.longitude]).addTo(map);
+                marker.bindPopup(`
+                    <b>${listing.title}</b><br>
+                    Type: ${listing.property_type}<br>
+                    Location: ${listing.location}<br>
+                    Price: ₱${listing.price}/night<br>
+                    <a href="/listing/${listing.id}/">View Details</a>
+                `);
+            });
+        });
+</script>
+{% endblock %}

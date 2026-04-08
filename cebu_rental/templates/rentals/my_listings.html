@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">My Listings</h1>
+    
+    {% if listings %}
+        <div class="row">
+            {% for listing in listings %}
+                <div class="col-md-4">
+                    <div class="card">
+                        {% if listing.image1 %}
+                            <img src="{{ listing.image1.url }}" class="card-img-top" alt="{{ listing.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-home fa-3x"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ listing.title }}</h5>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt"></i> {{ listing.get_location_display }}<br>
+                                <i class="fas fa-tag"></i> ₱{{ listing.price }}/night<br>
+                                <i class="fas fa-check-circle"></i> 
+                                {% if listing.is_available %}
+                                    <span class="text-success">Available</span>
+                                {% else %}
+                                    <span class="text-danger">Not Available</span>
+                                {% endif %}
+                            </p>
+                            <a href="{% url 'edit_listing' listing.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'delete_listing' listing.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="{% url 'listing_detail' listing.id %}" class="btn btn-info btn-sm">View</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            You haven't created any listings yet. 
+            <a href="{% url 'create_listing' %}">Create your first listing</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

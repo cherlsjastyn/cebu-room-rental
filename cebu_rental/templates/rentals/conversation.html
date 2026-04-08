@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h4>
+                        Conversation with {{ other_user.username }}
+                        <small class="text-muted">about "{{ listing.title }}"</small>
+                    </h4>
+                    <a href="{% url 'messages' %}" class="btn btn-secondary btn-sm">Back to Messages</a>
+                </div>
+                <div class="card-body">
+                    <div class="message-container" style="height: 400px; overflow-y: auto;">
+                        {% for msg in messages %}
+                            <div class="message {% if msg.sender == user %}message-sent{% else %}message-received{% endif %} mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <strong>{{ msg.sender.username }}</strong>
+                                    <small>{{ msg.created_at|date:"M d, Y H:i" }}</small>
+                                </div>
+                                <p class="mb-0 mt-2">{{ msg.message }}</p>
+                            </div>
+                        {% empty %}
+                            <p class="text-center text-muted">No messages yet. Start the conversation!</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary mt-2">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-scroll to bottom of message container
+    const messageContainer = document.querySelector('.message-container');
+    if (messageContainer) {
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">
+        {% if user.profile.user_type == 'buyer' %}
+            My Bookings
+        {% else %}
+            Booking Requests
+        {% endif %}
+    </h1>
+    
+    {% if bookings %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Listing</th>
+                        <th>Dates</th>
+                        <th>Guests</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'listing_detail' booking.listing.id %}">
+                                    {{ booking.listing.title }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ booking.check_in_date|date:"M d" }} - {{ booking.check_out_date|date:"M d, Y" }}
+                            </td>
+                            <td>{{ booking.number_of_guests }}</td>
+                            <td>₱{{ booking.total_price }}</td>
+                            <td>
+                                {% if booking.status == 'pending' %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% elif booking.status == 'confirmed' %}
+                                    <span class="badge bg-success">Confirmed</span>
+                                {% elif booking.status == 'cancelled' %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                {% elif booking.status == 'completed' %}
+                                    <span class="badge bg-info">Completed</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.profile.user_type == 'tenant' and booking.status == 'pending' %}
+                                    <form method="POST" action="{% url 'update_booking' booking.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" name="status" value="confirmed" class="btn btn-success btn-sm">Confirm</button>
+                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-sm">Cancel</button>
+                                    </form>
+                                {% elif user.profile.user_type == 'buyer' and booking.status == 'pending' %}
+                                    <form method="POST" action="{% url 'update_booking' booking.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-sm">Cancel Request</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            {% if user.profile.user_type == 'buyer' %}
+                You haven't made any bookings yet. 
+                <a href="{% url 'listing_list' %}">Browse listings</a> to book a room.
+            {% else %}
+                No booking requests yet. Share your listings to get bookings!
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

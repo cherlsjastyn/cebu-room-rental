@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">My Messages</h1>
+    
+    {% if conversations %}
+        <div class="list-group">
+            {% for conversation in conversations %}
+                <a href="{% url 'conversation' conversation.user.id conversation.listing.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">
+                            <i class="fas fa-comment"></i> 
+                            Conversation with {{ conversation.user.username }}
+                        </h5>
+                        <small>{{ conversation.last_message.created_at|timesince }} ago</small>
+                    </div>
+                    <p class="mb-1">
+                        <strong>Listing:</strong> {{ conversation.listing.title }}
+                    </p>
+                    <small class="text-muted">
+                        Last message: {{ conversation.last_message.message|truncatechars:50 }}
+                    </small>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No messages yet. Start a conversation by messaging a listing owner or responding to a buyer!
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

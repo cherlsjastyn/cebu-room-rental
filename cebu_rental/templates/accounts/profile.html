@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Profile Info</h4>
+                </div>
+                <div class="card-body text-center">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px;">
+                            <i class="fas fa-user fa-4x"></i>
+                        </div>
+                    {% endif %}
+                    <h5>{{ user.username }}</h5>
+                    <p class="text-muted">{{ user.email }}</p>
+                    <p>
+                        <strong>Account Type:</strong> 
+                        {% if user.profile.user_type == 'tenant' %}
+                            <span class="badge bg-primary">Tenant (Lister)</span>
+                        {% else %}
+                            <span class="badge bg-success">Buyer (Renter)</span>
+                        {% endif %}
+                    </p>
+                    {% if user.profile.phone_number %}
+                        <p><i class="fas fa-phone"></i> {{ user.profile.phone_number }}</p>
+                    {% endif %}
+                    <p><small>Member since: {{ user.date_joined|date:"F Y" }}</small></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Update Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ u_form|crispy }}
+                        {{ p_form|crispy }}
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h4>Account Statistics</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="alert alert-info">
+                                <h5>Listings</h5>
+                                <p class="display-4">{{ user.listings.count }}</p>
+                                <a href="{% url 'my_listings' %}">View my listings</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="alert alert-success">
+                                <h5>Bookings</h5>
+                                <p class="display-4">{{ user.bookings.count }}</p>
+                                <a href="{% url 'my_bookings' %}">View my bookings</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
