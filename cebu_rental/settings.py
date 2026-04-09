@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-n367@&-r8ezf&j=yud=6&1415h15ol+8dbf)uqpvhg28t_jck8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','https://cebu-room-rental-finaloutput.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','https://cebu-room-rental-system.onrender.com']
 
 
 # Application definition
@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap5',
-    'rentals',  # Make sure this is here
-    'accounts',  # Make sure this is here
+    'rentals', 
+    'accounts', 
+    'cloudinary',
+    'cloudinary_storage'
 ]
 
 MIDDLEWARE = [
@@ -123,8 +125,21 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+
+# Configure Cloudinary (get these from your Cloudinary dashboard)
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'your_cloud_name',
+    'API_KEY': 'your_api_key',
+    'API_SECRET': 'your_api_secret',
+}
+
+# Change MEDIA settings
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
