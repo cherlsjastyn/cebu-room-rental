@@ -132,9 +132,9 @@ import cloudinary.api
 
 # Configure Cloudinary (get these from your Cloudinary dashboard)
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'your_cloud_name',
-    'API_KEY': 'your_api_key',
-    'API_SECRET': 'your_api_secret',
+    'CLOUD_NAME': 'dessweou2',
+    'API_KEY': '269993856451991',
+    'API_SECRET': 'OwghhOVSkvYzC8spbsZNrvc_ZQ0',
 }
 
 # Change MEDIA settings
