@@ -131,11 +131,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Configure Cloudinary (get these from your Cloudinary dashboard)
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dessweou2',
-    'API_KEY': '269993856451991',
-    'API_SECRET': 'OwghhOVSkvYzC8spbsZNrvc_ZQ0',
+    'CLOUD_NAME': os.environ.get('dessweou2'),
+    'API_KEY': os.environ.get('269993856451991'),
+    'API_SECRET': os.environ.get('OwghhOVSkvYzC8spbsZNrvc_ZQ0'),
 }
-
 # Change MEDIA settings
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
