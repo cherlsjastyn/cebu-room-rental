@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +30,7 @@ SECRET_KEY = 'django-insecure-n367@&-r8ezf&j=yud=6&1415h15ol+8dbf)uqpvhg28t_jck8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','https://cebu-room-rentals-.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','https://cebu-room-rents.onrender.com']
 
 
 # Application definition
@@ -43,8 +46,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'rentals', 
     'accounts', 
-    'cloudinary',
-    'cloudinary_storage'
+    'cloudinary_storage',
+    'cloudinary'
 ]
 
 MIDDLEWARE = [
@@ -125,10 +128,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
 
 # Configure Cloudinary (get these from your Cloudinary dashboard)
 CLOUDINARY_STORAGE = {
@@ -139,6 +138,9 @@ CLOUDINARY_STORAGE = {
 
 # Change MEDIA settings
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
