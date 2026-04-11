@@ -16,8 +16,8 @@ A complete web application for renting rooms, boarding houses, apartments, condo
 ## ✨ Features
 
 ### User Roles
-- **Tenant (Lister)** - Can post and manage rental listings
-- **Buyer (Renter)** - Can browse, search, and book rooms
+- **Tenant (Lister)** - Can post and manage rental listings.
+- **Buyer (Renter)** - Can browse, search, and book rooms.
 
 ### Core Functionality
 - ✅ User registration and authentication
