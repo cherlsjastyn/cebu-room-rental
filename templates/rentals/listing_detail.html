@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load cloudinary %}  <!-- ADD THIS LINE AT THE TOP -->
 
 {% block content %}
 <div class="container">
@@ -10,32 +11,31 @@
                 <i class="fas fa-map-marker-alt"></i> {{ listing.address }}, {{ listing.get_location_display }}
             </p>
             
-            <!-- Images -->
+            <!-- Images - UPDATED FOR CLOUDINARY -->
             <div class="row mb-4">
                 {% if listing.image1 %}
                     <div class="col-md-12 mb-3">
-                        <img src="{{ listing.image1.url }}" class="img-fluid rounded" alt="{{ listing.title }}" style="max-height: 400px; width: 100%; object-fit: cover;">
+                        {% cloudinary listing.image1 width=800 height=400 crop="fill" class="img-fluid rounded" %}
                     </div>
                 {% endif %}
-                {% if listing.image2 or listing.image3 %}
+                <div class="row">
                     <div class="col-md-6">
                         {% if listing.image2 %}
-                            <img src="{{ listing.image2.url }}" class="img-fluid rounded" alt="{{ listing.title }}" style="height: 200px; width: 100%; object-fit: cover;">
+                            {% cloudinary listing.image2 width=400 height=250 crop="fill" class="img-fluid rounded" %}
                         {% endif %}
                     </div>
                     <div class="col-md-6">
                         {% if listing.image3 %}
-                            <img src="{{ listing.image3.url }}" class="img-fluid rounded" alt="{{ listing.title }}" style="height: 200px; width: 100%; object-fit: cover;">
+                            {% cloudinary listing.image3 width=400 height=250 crop="fill" class="img-fluid rounded" %}
                         {% endif %}
                     </div>
-                {% endif %}
+                </div>
             </div>
             
-            <!-- Description -->
+            <!-- Rest of your template stays the same... -->
             <h3>Description</h3>
             <p>{{ listing.description|linebreaks }}</p>
             
-            <!-- Amenities -->
             <h3>Amenities</h3>
             <ul>
                 {% for amenity in listing.get_amenities_list %}

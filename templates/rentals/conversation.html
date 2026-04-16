@@ -16,12 +16,16 @@
                 <div class="card-body">
                     <div class="message-container" style="height: 400px; overflow-y: auto;">
                         {% for msg in messages %}
-                            <div class="message {% if msg.sender == user %}message-sent{% else %}message-received{% endif %} mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <strong>{{ msg.sender.username }}</strong>
-                                    <small>{{ msg.created_at|date:"M d, Y H:i" }}</small>
+                            <div class="message mb-3 {% if msg.sender == user %}text-end{% else %}text-start{% endif %}">
+                                <div class="d-inline-block p-2 rounded {% if msg.sender == user %}bg-primary text-white{% else %}bg-light border{% endif %}" style="max-width: 80%;">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>{{ msg.sender.username }}</strong>
+                                        <small class="{% if msg.sender == user %}text-white-50{% else %}text-muted{% endif %} ms-2">
+                                            {{ msg.created_at|date:"M d, Y H:i" }}
+                                        </small>
+                                    </div>
+                                    <p class="mb-0 mt-2">{{ msg.message }}</p>
                                 </div>
-                                <p class="mb-0 mt-2">{{ msg.message }}</p>
                             </div>
                         {% empty %}
                             <p class="text-center text-muted">No messages yet. Start the conversation!</p>

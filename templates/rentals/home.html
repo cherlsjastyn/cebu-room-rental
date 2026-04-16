@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cloudinary %}
 
 {% block content %}
 <div class="hero-section">
@@ -19,7 +20,7 @@
             <div class="col-md-4">
                 <div class="card">
                     {% if listing.image1 %}
-                        <img src="{{ listing.image1.url }}" class="card-img-top" alt="{{ listing.title }}" style="height: 200px; object-fit: cover;">
+                        {% cloudinary listing.image1 width=400 height=250 crop="fill" class="card-img-top" style="height: 200px; object-fit: cover;" %}
                     {% else %}
                         <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
                             <i class="fas fa-home fa-3x"></i>

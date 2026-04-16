@@ -1,0 +1,18 @@
+{
+  "builds": [
+    {
+      "src": "cebu_rental/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "cebu_rental/wsgi.py"
+    }
+  ]
+}

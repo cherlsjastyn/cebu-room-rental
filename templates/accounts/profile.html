@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load cloudinary %}  <!-- ADD THIS LINE AT THE TOP -->
 
 {% block content %}
 <div class="container">
@@ -11,7 +12,7 @@
                 </div>
                 <div class="card-body text-center">
                     {% if user.profile.profile_picture %}
-                        <img src="{{ profile.profile_picture.url }}" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% cloudinary user.profile.profile_picture width=150 height=150 crop="fill" class="rounded-circle mb-3" %}
                     {% else %}
                         <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px;">
                             <i class="fas fa-user fa-4x"></i>
