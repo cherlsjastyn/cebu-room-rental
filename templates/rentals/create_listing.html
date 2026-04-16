@@ -2,23 +2,61 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container">
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Create New Listing</h2>
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h2 class="fw-bold mb-0">
+                        <i class="fas fa-plus-circle text-teal me-2"></i> List Your Property
+                    </h2>
+                    <p class="text-muted mt-2">Fill out the details below to add your property</p>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary">Create Listing</button>
-                        <a href="{% url 'my_listings' %}" class="btn btn-secondary">Cancel</a>
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'my_listings' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fas fa-arrow-left me-2"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-teal rounded-pill px-4">
+                                <i class="fas fa-save me-2"></i> Create Listing
+                            </button>
+                        </div>
                     </form>
+                </div>
+            </div>
+            
+            <!-- Tips Section -->
+            <div class="card border-0 shadow-sm rounded-4 mt-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-lightbulb text-teal me-2"></i> Pro Tips
+                    </h5>
+                    <ul class="text-muted">
+                        <li>Upload high-quality photos of your property</li>
+                        <li>Be detailed in your description to attract more renters</li>
+                        <li>List all amenities to help renters find your property</li>
+                        <li>Set competitive pricing based on similar properties</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .text-teal { color: #0f766e; }
+    .btn-teal {
+        background: #0f766e;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-teal:hover {
+        background: #0d9488;
+        transform: translateY(-2px);
+    }
+</style>
 {% endblock %}

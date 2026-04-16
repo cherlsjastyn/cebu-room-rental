@@ -2,42 +2,57 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header">
-                    <h4>
-                        Conversation with {{ other_user.username }}
-                        <small class="text-muted">about "{{ listing.title }}"</small>
-                    </h4>
-                    <a href="{% url 'messages' %}" class="btn btn-secondary btn-sm">Back to Messages</a>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="fw-bold mb-0">
+                                <i class="fas fa-comments text-teal me-2"></i> 
+                                {{ other_user.username }}
+                            </h4>
+                            <small class="text-muted">About: {{ listing.title|truncatechars:40 }}</small>
+                        </div>
+                        <a href="{% url 'messages' %}" class="btn btn-outline-secondary rounded-pill">
+                            <i class="fas fa-arrow-left me-2"></i> Back
+                        </a>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="message-container" style="height: 400px; overflow-y: auto;">
+                
+                <div class="card-body p-4">
+                    <!-- Messages Container -->
+                    <div class="message-container border rounded-3 p-3 mb-4" style="height: 400px; overflow-y: auto; background-color: #f8fafc;">
                         {% for msg in messages %}
-                            <div class="message mb-3 {% if msg.sender == user %}text-end{% else %}text-start{% endif %}">
-                                <div class="d-inline-block p-2 rounded {% if msg.sender == user %}bg-primary text-white{% else %}bg-light border{% endif %}" style="max-width: 80%;">
-                                    <div class="d-flex justify-content-between">
+                            <div class="mb-3 {% if msg.sender == user %}text-end{% endif %}">
+                                <div class="d-inline-block p-3 rounded-3 {% if msg.sender == user %}bg-teal text-white{% else %}bg-white border{% endif %}" style="max-width: 75%;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
                                         <strong>{{ msg.sender.username }}</strong>
                                         <small class="{% if msg.sender == user %}text-white-50{% else %}text-muted{% endif %} ms-2">
-                                            {{ msg.created_at|date:"M d, Y H:i" }}
+                                            {{ msg.created_at|date:"M d, H:i" }}
                                         </small>
                                     </div>
-                                    <p class="mb-0 mt-2">{{ msg.message }}</p>
+                                    <p class="mb-0">{{ msg.message }}</p>
                                 </div>
                             </div>
                         {% empty %}
-                            <p class="text-center text-muted">No messages yet. Start the conversation!</p>
+                            <div class="text-center py-5">
+                                <i class="fas fa-comment-dots fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No messages yet. Start the conversation!</p>
+                            </div>
                         {% endfor %}
                     </div>
                     
-                    <hr>
-                    
+                    <!-- Message Form -->
                     <form method="POST">
                         {% csrf_token %}
                         {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary mt-2">Send Message</button>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-teal rounded-pill px-4">
+                                <i class="fas fa-paper-plane me-2"></i> Send Message
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -52,4 +67,19 @@
         messageContainer.scrollTop = messageContainer.scrollHeight;
     }
 </script>
+
+<style>
+    .text-teal { color: #0f766e; }
+    .bg-teal { background-color: #0f766e; }
+    .btn-teal {
+        background: #0f766e;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-teal:hover {
+        background: #0d9488;
+        transform: translateY(-2px);
+    }
+</style>
 {% endblock %}

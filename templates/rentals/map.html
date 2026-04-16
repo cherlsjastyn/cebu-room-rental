@@ -1,38 +1,77 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container-fluid">
-    <h1 class="my-4">Map View - Find Rooms in Cebu</h1>
-    <div id="map" style="height: 600px; width: 100%;"></div>
+<div class="container-fluid px-0">
+    <div class="position-relative">
+        <div class="bg-teal-gradient py-4 text-white text-center">
+            <h1 class="fw-bold mb-0">
+                <i class="fas fa-map-marked-alt me-2"></i> Find Properties on the Map
+            </h1>
+            <p class="mt-2 mb-0">Browse available rooms and apartments in Cebu City and Lapu-Lapu City</p>
+        </div>
+        
+        <div id="map" style="height: calc(100vh - 200px); width: 100%;"></div>
+    </div>
 </div>
 
-<!-- Leaflet CSS and JS (Free alternative to Google Maps) -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<!-- Leaflet CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
     // Initialize map centered on Cebu
     var map = L.map('map').setView([10.3157, 123.8854], 12);
     
-    // Add tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+    // Add tile layer (beautiful map style)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
     }).addTo(map);
+    
+    // Custom marker icon
+    var customIcon = L.divIcon({
+        html: '<div style="background-color: #0f766e; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-home" style="color: white; font-size: 14px;"></i></div>',
+        iconSize: [30, 30],
+        popupAnchor: [0, -15]
+    });
     
     // Fetch listings from API
     fetch('/api/listings/')
         .then(response => response.json())
         .then(listings => {
             listings.forEach(listing => {
-                var marker = L.marker([listing.latitude, listing.longitude]).addTo(map);
-                marker.bindPopup(`
-                    <b>${listing.title}</b><br>
-                    Type: ${listing.property_type}<br>
-                    Location: ${listing.location}<br>
-                    Price: ₱${listing.price}/night<br>
-                    <a href="/listing/${listing.id}/">View Details</a>
-                `);
+                var marker = L.marker([listing.latitude, listing.longitude], { icon: customIcon }).addTo(map);
+                
+                var popupContent = `
+                    <div style="min-width: 200px;">
+                        <h6 style="font-weight: bold; margin-bottom: 5px;">${listing.title}</h6>
+                        <p style="margin-bottom: 5px;"><i class="fas fa-tag"></i> ₱${listing.price}/night</p>
+                        <p style="margin-bottom: 5px;"><i class="fas fa-building"></i> ${listing.property_type}</p>
+                        <p style="margin-bottom: 5px;"><i class="fas fa-map-marker-alt"></i> ${listing.location}</p>
+                        <a href="/listing/${listing.id}/" class="btn btn-teal btn-sm mt-2" style="background: #0f766e; color: white; text-decoration: none; padding: 5px 10px; border-radius: 20px;">View Details</a>
+                    </div>
+                `;
+                
+                marker.bindPopup(popupContent);
             });
-        });
+        })
+        .catch(error => console.error('Error loading listings:', error));
 </script>
+
+<style>
+    .bg-teal-gradient {
+        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+    }
+    .btn-teal {
+        background: #0f766e;
+        color: white;
+    }
+    .btn-teal:hover {
+        background: #0d9488;
+    }
+    .leaflet-popup-content-wrapper {
+        border-radius: 12px;
+    }
+</style>
 {% endblock %}

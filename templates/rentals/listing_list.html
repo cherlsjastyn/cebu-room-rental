@@ -2,80 +2,158 @@
 {% load cloudinary %}
 
 {% block content %}
-<div class="container">
-    <h1 class="my-4">Available Rooms for Rent</h1>
-    
-    <!-- Filters -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5>Filter Listings</h5>
-            <form method="GET" class="row g-3">
-                <div class="col-md-3">
-                    <label>Location</label>
-                    <select name="location" class="form-control">
-                        <option value="">All Locations</option>
-                        <option value="cebu_city">Cebu City</option>
-                        <option value="lapulapu">Lapu-Lapu City</option>
-                    </select>
+<div class="container py-4">
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 90px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-filter text-teal"></i> Filter Properties
+                    </h5>
+                    <form method="GET">
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Location</label>
+                            <select name="location" class="form-select rounded-pill">
+                                <option value="">All Locations</option>
+                                <option value="cebu_city">Cebu City</option>
+                                <option value="lapulapu">Lapu-Lapu City</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Property Type -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Property Type</label>
+                            <select name="property_type" class="form-select rounded-pill">
+                                <option value="">All Types</option>
+                                {% for type_code, type_name in property_types %}
+                                    <option value="{{ type_code }}">{{ type_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Price Range -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Price Range (per night)</label>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <input type="number" name="min_price" class="form-control rounded-pill" placeholder="Min ₱">
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" name="max_price" class="form-control rounded-pill" placeholder="Max ₱">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Occupants -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Max Occupants</label>
+                            <input type="number" name="occupants" class="form-control rounded-pill" placeholder="Number of persons">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-teal w-100 rounded-pill mb-2">
+                            <i class="fas fa-search"></i> Apply Filters
+                        </button>
+                        <a href="{% url 'listing_list' %}" class="btn btn-outline-secondary w-100 rounded-pill">
+                            <i class="fas fa-undo-alt"></i> Reset
+                        </a>
+                    </form>
                 </div>
-                <div class="col-md-3">
-                    <label>Property Type</label>
-                    <select name="property_type" class="form-control">
-                        <option value="">All Types</option>
-                        {% for type_code, type_name in property_types %}
-                            <option value="{{ type_code }}">{{ type_name }}</option>
-                        {% endfor %}
-                    </select>
+            </div>
+        </div>
+        
+        <!-- Results -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold mb-0">
+                    <i class="fas fa-building text-teal"></i> Available Properties
+                    <span class="badge bg-teal-light text-teal ms-2">{{ listings.count }} found</span>
+                </h4>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-sort"></i> Sort by
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
+                        <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
+                        <li><a class="dropdown-item" href="#">Newest First</a></li>
+                        <li><a class="dropdown-item" href="#">Most Popular</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-2">
-                    <label>Min Price</label>
-                    <input type="number" name="min_price" class="form-control" placeholder="Min ₱">
-                </div>
-                <div class="col-md-2">
-                    <label>Max Price</label>
-                    <input type="number" name="max_price" class="form-control" placeholder="Max ₱">
-                </div>
-                <div class="col-md-2">
-                    <label>Occupants</label>
-                    <input type="number" name="occupants" class="form-control" placeholder="Persons">
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="{% url 'listing_list' %}" class="btn btn-secondary">Reset</a>
-                </div>
-            </form>
+            </div>
+            
+            <div class="row g-4">
+                {% for listing in listings %}
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm hover-shadow transition-all rounded-4 overflow-hidden">
+                            {% if listing.image1 %}
+                                {% cloudinary listing.image1 width=400 height=250 crop="fill" class="card-img-top" style="height: 200px; object-fit: cover;" %}
+                            {% else %}
+                                <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="fas fa-home fa-4x text-white-50"></i>
+                                </div>
+                            {% endif %}
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title fw-bold mb-0">{{ listing.title|truncatechars:35 }}</h6>
+                                    <span class="badge bg-teal-light text-teal px-2 py-1 rounded-pill">
+                                        {{ listing.get_property_type_display }}
+                                    </span>
+                                </div>
+                                <p class="text-muted small mb-2">
+                                    <i class="fas fa-map-marker-alt text-teal me-1"></i> {{ listing.get_location_display }}
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <div>
+                                        <span class="fw-bold text-teal fs-5">₱{{ listing.price }}</span>
+                                        <span class="text-muted">/night</span>
+                                    </div>
+                                    <a href="{% url 'listing_detail' listing.id %}" class="btn btn-sm btn-teal rounded-pill px-3">
+                                        View <i class="fas fa-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <div class="text-center py-5">
+                            <i class="fas fa-home fa-4x text-muted mb-3"></i>
+                            <h5>No properties found</h5>
+                            <p class="text-muted">Try adjusting your filters or check back later.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-    
-    <!-- Results -->
-    <div class="row">
-        {% for listing in listings %}
-            <div class="col-md-4">
-                <div class="card">
-                    {% if listing.image1 %}
-                        {% cloudinary listing.image1 width=400 height=250 crop="fill" class="card-img-top" style="height: 200px; object-fit: cover;" %}
-                    {% else %}
-                        <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <i class="fas fa-home fa-3x"></i>
-                        </div>
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ listing.title }}</h5>
-                        <p class="card-text">
-                            <i class="fas fa-map-marker-alt"></i> {{ listing.get_location_display }}<br>
-                            <i class="fas fa-building"></i> {{ listing.get_property_type_display }}<br>
-                            <i class="fas fa-users"></i> {{ listing.max_occupants }} persons<br>
-                            <span class="price-tag">₱{{ listing.price }}/night</span>
-                        </p>
-                        <a href="{% url 'listing_detail' listing.id %}" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-        {% empty %}
-            <div class="col-12">
-                <p class="text-center">No listings found matching your criteria.</p>
-            </div>
-        {% endfor %}
-    </div>
 </div>
+
+<style>
+    .text-teal { color: #0f766e; }
+    .bg-teal-light { background-color: #ccfbf1; }
+    .btn-teal {
+        background: #0f766e;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-teal:hover {
+        background: #0d9488;
+        transform: translateY(-2px);
+        color: white;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 25px -10px rgba(0, 0, 0, 0.1) !important;
+    }
+    .form-select, .form-control {
+        border-color: #e2e8f0;
+    }
+    .form-select:focus, .form-control:focus {
+        border-color: #0f766e;
+        box-shadow: 0 0 0 0.2rem rgba(15, 118, 110, 0.1);
+    }
+</style>
 {% endblock %}

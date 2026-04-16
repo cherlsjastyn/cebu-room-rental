@@ -1,80 +1,111 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <h1 class="my-4">
-        {% if user.profile.user_type == 'buyer' %}
-            My Bookings
-        {% else %}
-            Booking Requests
-        {% endif %}
+<div class="container py-4">
+    <h1 class="fw-bold mb-4">
+        <i class="fas fa-calendar-check text-teal me-2"></i> 
+        {% if user.profile.user_type == 'buyer' %}My Bookings{% else %}Booking Requests{% endif %}
     </h1>
     
     {% if bookings %}
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Listing</th>
-                        <th>Dates</th>
-                        <th>Guests</th>
-                        <th>Total Price</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for booking in bookings %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'listing_detail' booking.listing.id %}">
-                                    {{ booking.listing.title }}
-                                </a>
-                            </td>
-                            <td>
-                                {{ booking.check_in_date|date:"M d" }} - {{ booking.check_out_date|date:"M d, Y" }}
-                            </td>
-                            <td>{{ booking.number_of_guests }}</td>
-                            <td>₱{{ booking.total_price }}</td>
-                            <td>
-                                {% if booking.status == 'pending' %}
-                                    <span class="badge bg-warning">Pending</span>
-                                {% elif booking.status == 'confirmed' %}
-                                    <span class="badge bg-success">Confirmed</span>
-                                {% elif booking.status == 'cancelled' %}
-                                    <span class="badge bg-danger">Cancelled</span>
-                                {% elif booking.status == 'completed' %}
-                                    <span class="badge bg-info">Completed</span>
-                                {% endif %}
-                            </td>
-                            <td>
+        <div class="row g-4">
+            {% for booking in bookings %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title fw-bold mb-0">{{ booking.listing.title|truncatechars:30 }}</h5>
+                                <span class="badge rounded-pill px-3 py-2 
+                                    {% if booking.status == 'pending' %}bg-warning text-dark
+                                    {% elif booking.status == 'confirmed' %}bg-success
+                                    {% elif booking.status == 'cancelled' %}bg-danger
+                                    {% else %}bg-info{% endif %}">
+                                    <i class="fas 
+                                        {% if booking.status == 'pending' %}fa-clock
+                                        {% elif booking.status == 'confirmed' %}fa-check-circle
+                                        {% elif booking.status == 'cancelled' %}fa-times-circle
+                                        {% else %}fa-check-double{% endif %} me-1"></i>
+                                    {{ booking.status|title }}
+                                </span>
+                            </div>
+                            
+                            <p class="text-muted small mb-2">
+                                <i class="fas fa-map-marker-alt text-teal me-1"></i> {{ booking.listing.get_location_display }}
+                            </p>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small class="text-muted">Check-in:</small>
+                                    <small class="fw-semibold">{{ booking.check_in_date|date:"M d, Y" }}</small>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Check-out:</small>
+                                    <small class="fw-semibold">{{ booking.check_out_date|date:"M d, Y" }}</small>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted">Total Price</small>
+                                    <h5 class="fw-bold text-teal mb-0">₱{{ booking.total_price }}</h5>
+                                </div>
                                 {% if user.profile.user_type == 'tenant' and booking.status == 'pending' %}
-                                    <form method="POST" action="{% url 'update_booking' booking.id %}" style="display: inline;">
+                                    <form method="POST" action="{% url 'update_booking' booking.id %}" class="d-inline">
                                         {% csrf_token %}
-                                        <button type="submit" name="status" value="confirmed" class="btn btn-success btn-sm">Confirm</button>
-                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-sm">Cancel</button>
+                                        <div class="btn-group">
+                                            <button type="submit" name="status" value="confirmed" class="btn btn-sm btn-success rounded-pill me-1">
+                                                <i class="fas fa-check"></i> Accept
+                                            </button>
+                                            <button type="submit" name="status" value="cancelled" class="btn btn-sm btn-danger rounded-pill">
+                                                <i class="fas fa-times"></i> Decline
+                                            </button>
+                                        </div>
                                     </form>
                                 {% elif user.profile.user_type == 'buyer' and booking.status == 'pending' %}
-                                    <form method="POST" action="{% url 'update_booking' booking.id %}" style="display: inline;">
+                                    <form method="POST" action="{% url 'update_booking' booking.id %}" class="d-inline">
                                         {% csrf_token %}
-                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-sm">Cancel Request</button>
+                                        <button type="submit" name="status" value="cancelled" class="btn btn-sm btn-outline-danger rounded-pill">
+                                            <i class="fas fa-times"></i> Cancel Request
+                                        </button>
                                     </form>
                                 {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     {% else %}
-        <div class="alert alert-info">
-            {% if user.profile.user_type == 'buyer' %}
-                You haven't made any bookings yet. 
-                <a href="{% url 'listing_list' %}">Browse listings</a> to book a room.
-            {% else %}
-                No booking requests yet. Share your listings to get bookings!
-            {% endif %}
+        <div class="text-center py-5">
+            <div class="card border-0 shadow-sm rounded-4 p-5">
+                <i class="fas fa-calendar-alt fa-4x text-muted mb-3"></i>
+                <h4>No bookings yet</h4>
+                <p class="text-muted">
+                    {% if user.profile.user_type == 'buyer' %}
+                        You haven't made any bookings yet.
+                        <br><a href="{% url 'listing_list' %}" class="text-teal">Browse properties</a> to get started.
+                    {% else %}
+                        No booking requests yet. Share your listings to attract renters!
+                    {% endif %}
+                </p>
+            </div>
         </div>
     {% endif %}
 </div>
+
+<style>
+    .text-teal { color: #0f766e; }
+    .btn-teal {
+        background: #0f766e;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-teal:hover {
+        background: #0d9488;
+        transform: translateY(-2px);
+    }
+</style>
 {% endblock %}

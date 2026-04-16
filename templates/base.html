@@ -3,74 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cebu Room Rental System</title>
+    <title>Cebu Room Rental System - Find Your Perfect Space</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/static/css/custom.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        /* Modern Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            padding: 1rem 0;
+        }
+        
         .navbar-brand {
-            font-weight: bold;
-            color: #2c3e50 !important;
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 0;
-            margin-bottom: 40px;
-        }
-        .card {
-            transition: transform 0.3s;
-            margin-bottom: 20px;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .price-tag {
             font-size: 1.5rem;
-            font-weight: bold;
-            color: #2c3e50;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .btn-primary {
-            background-color: #667eea;
-            border-color: #667eea;
+        
+        .nav-link {
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
         }
-        .btn-primary:hover {
-            background-color: #5a67d8;
-            border-color: #5a67d8;
+        
+        .nav-link:hover {
+            color: #0f766e;
+            background-color: #f1f5f9;
         }
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 30px 0;
-            margin-top: 50px;
+        
+        .nav-link i {
+            margin-right: 0.5rem;
         }
-        .message-container {
-            max-height: 400px;
-            overflow-y: auto;
+        
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-        .message {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 10px;
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(15, 118, 110, 0.2);
         }
-        .message-sent {
-            background-color: #667eea;
-            color: white;
-            margin-left: 20%;
+        
+        /* Footer */
+        .footer {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 3rem 0;
+            margin-top: 4rem;
         }
-        .message-received {
-            background-color: #e9ecef;
-            margin-right: 20%;
+        
+        .footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: #14b8a6;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #14b8a6;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0f766e;
+        }
+        
+        /* Alert Styles */
+        .alert {
+            border: none;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+        }
+        
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
     </style>
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
-                <i class="fas fa-home"></i> Cebu Room Rental
+                <i class="fas fa-home"></i> CebuRoomRental
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -78,45 +155,68 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">
+                            <i class="fas fa-home"></i> Home
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'listing_list' %}">Listings</a>
+                        <a class="nav-link" href="{% url 'listing_list' %}">
+                            <i class="fas fa-search"></i> Explore
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'map' %}">Map View</a>
+                        <a class="nav-link" href="{% url 'map' %}">
+                            <i class="fas fa-map-marked-alt"></i> Map View
+                        </a>
                     </li>
                     {% if user.is_authenticated %}
                         {% if user.profile.user_type == 'tenant' %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'create_listing' %}">
-                                    <i class="fas fa-plus"></i> Add Listing
+                                    <i class="fas fa-plus-circle"></i> List Property
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'my_listings' %}">My Listings</a>
+                                <a class="nav-link" href="{% url 'my_listings' %}">
+                                    <i class="fas fa-building"></i> My Properties
+                                </a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'my_bookings' %}">Bookings</a>
+                            <a class="nav-link" href="{% url 'my_bookings' %}">
+                                <i class="fas fa-calendar-check"></i> Bookings
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'messages' %}">
                                 <i class="fas fa-envelope"></i> Messages
+                                <span id="unreadCount" class="badge bg-danger rounded-pill" style="display: none;">0</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'profile' %}">
+                                    <i class="fas fa-id-card"></i> My Profile
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a></li>
+                            </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                            <a class="btn btn-primary-custom text-white ms-2" href="{% url 'register' %}">
+                                <i class="fas fa-user-plus"></i> Sign Up
+                            </a>
                         </li>
                     {% endif %}
                 </ul>
@@ -128,7 +228,8 @@
     {% if messages %}
         <div class="container mt-3">
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -137,16 +238,78 @@
     {% endif %}
 
     <!-- Main Content -->
-    {% block content %}
-    {% endblock %}
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="container text-center">
-            <p>&copy; 2024 Cebu Room Rental System. Find your perfect room in Cebu City and Lapu-Lapu City!</p>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4 class="text-white mb-3">CebuRoomRental</h4>
+                    <p>Your trusted platform for finding the perfect room in Cebu City and Lapu-Lapu City.</p>
+                    <div class="mt-3">
+                        <a href="#" class="me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="text-white mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'listing_list' %}">Browse Listings</a></li>
+                        <li><a href="{% url 'map' %}">Map View</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="text-white mb-3">Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="text-white mb-3">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2"></i> support@ceburoomrental.com</li>
+                        <li><i class="fas fa-phone me-2"></i> +63 (32) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Cebu City, Philippines</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <div class="text-center">
+                <small>&copy; 2024 CebuRoomRental. All rights reserved.</small>
+            </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeInUp');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.card, .feature-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
