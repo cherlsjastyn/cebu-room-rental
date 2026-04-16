@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from urllib.parse import quote_plus
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -85,9 +86,9 @@ WSGI_APPLICATION = 'cebu_rental.wsgi.application'
 # Database
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
+        default=os.environ.get('DATABASE_URL',""),
         conn_max_age=600,
-        conn_health_checks=True,
+        ssl_require=True,
     )
 }
 
