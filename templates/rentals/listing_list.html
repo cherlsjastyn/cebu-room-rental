@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load cloudinary %}
 
 {% block content %}
 <div class="container py-4">
@@ -17,8 +16,9 @@
                             <label class="form-label fw-semibold">Location</label>
                             <select name="location" class="form-select rounded-pill">
                                 <option value="">All Locations</option>
-                                <option value="cebu_city">Cebu City</option>
-                                <option value="lapulapu">Lapu-Lapu City</option>
+                                {% for loc_code, loc_name in locations %}
+                                    <option value="{{ loc_code }}">{{ loc_name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         
@@ -35,7 +35,7 @@
                         
                         <!-- Price Range -->
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Price Range (per night)</label>
+                            <label class="form-label fw-semibold">Price Range</label>
                             <div class="row g-2">
                                 <div class="col-6">
                                     <input type="number" name="min_price" class="form-control rounded-pill" placeholder="Min ₱">
@@ -70,17 +70,6 @@
                     <i class="fas fa-building text-teal"></i> Available Properties
                     <span class="badge bg-teal-light text-teal ms-2">{{ listings.count }} found</span>
                 </h4>
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-sort"></i> Sort by
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-                        <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
-                        <li><a class="dropdown-item" href="#">Newest First</a></li>
-                        <li><a class="dropdown-item" href="#">Most Popular</a></li>
-                    </ul>
-                </div>
             </div>
             
             <div class="row g-4">
@@ -88,7 +77,7 @@
                     <div class="col-md-6">
                         <div class="card h-100 border-0 shadow-sm hover-shadow transition-all rounded-4 overflow-hidden">
                             {% if listing.image1 %}
-                                {% cloudinary listing.image1 width=400 height=250 crop="fill" class="card-img-top" style="height: 200px; object-fit: cover;" %}
+                                <img src="{{ listing.image1.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ listing.title }}">   
                             {% else %}
                                 <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
                                     <i class="fas fa-home fa-4x text-white-50"></i>
@@ -104,10 +93,19 @@
                                 <p class="text-muted small mb-2">
                                     <i class="fas fa-map-marker-alt text-teal me-1"></i> {{ listing.get_location_display }}
                                 </p>
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <div>
-                                        <span class="fw-bold text-teal fs-5">₱{{ listing.price }}</span>
+                                <div class="mt-2">
+                                    {% if listing.daily_price %}
+                                        <span class="fw-bold text-teal">₱{{ listing.daily_price }}</span>
                                         <span class="text-muted">/night</span>
+                                    {% elif listing.monthly_price %}
+                                        <span class="fw-bold text-teal">₱{{ listing.monthly_price }}</span>
+                                        <span class="text-muted">/month</span>
+                                    {% endif %}
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div>
+                                        <i class="fas fa-users text-teal me-1"></i>
+                                        <span>{{ listing.max_occupants }} guests</span>
                                     </div>
                                     <a href="{% url 'listing_detail' listing.id %}" class="btn btn-sm btn-teal rounded-pill px-3">
                                         View <i class="fas fa-arrow-right ms-1"></i>

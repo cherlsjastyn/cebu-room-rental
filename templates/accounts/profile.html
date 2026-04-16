@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% load cloudinary %}
 
 {% block content %}
 <div class="container py-4">
@@ -10,7 +9,7 @@
             <div class="card border-0 shadow-sm rounded-4 text-center">
                 <div class="card-body p-4">
                     {% if user.profile.profile_picture %}
-                        {% cloudinary user.profile.profile_picture width=150 height=150 crop="fill" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;" %}
+                        <img src="{{ user.profile.profile_picture.url }}" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
                     {% else %}
                         <div class="rounded-circle bg-teal-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 120px; height: 120px;">
                             <i class="fas fa-user fa-3x text-teal"></i>
@@ -25,6 +24,7 @@
                     <hr class="my-3">
                     <div class="text-start">
                         <p class="mb-2"><i class="fas fa-phone text-teal me-2"></i> {{ user.profile.phone_number|default:"Not provided" }}</p>
+                        <p class="mb-2"><i class="fas fa-envelope text-teal me-2"></i> {{ user.email }}</p>
                         <p class="mb-2"><i class="fas fa-calendar-alt text-teal me-2"></i> Joined {{ user.date_joined|date:"F Y" }}</p>
                     </div>
                 </div>
@@ -60,8 +60,7 @@
                 <div class="card-body p-4">
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ u_form|crispy }}
-                        {{ p_form|crispy }}
+                        {{ form|crispy }}
                         <div class="mt-4">
                             <button type="submit" class="btn btn-teal px-4 py-2 rounded-pill">
                                 <i class="fas fa-save me-2"></i> Save Changes

@@ -27,16 +27,9 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="text-center mt-4">
-                <p class="small text-muted">
-                    By registering, you agree to our <a href="#" class="text-teal">Terms of Service</a> and <a href="#" class="text-teal">Privacy Policy</a>
-                </p>
-            </div>
         </div>
     </div>
 </div>
-
 <style>
     .text-teal { color: #0f766e; }
     .btn-teal {
@@ -44,10 +37,16 @@
         color: white;
         border: none;
         transition: all 0.3s ease;
+        padding: 12px;
+        font-weight: 600;
     }
     .btn-teal:hover {
         background: #0d9488;
         transform: translateY(-2px);
+    }
+    .form-control:focus {
+        border-color: #0f766e;
+        box-shadow: 0 0 0 0.2rem rgba(15, 118, 110, 0.1);
     }
 </style>
 {% endblock %}

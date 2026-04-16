@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
-{% load cloudinary %}
 
 {% block content %}
-<!-- Hero Section -->
 <section class="hero-section" style="background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%); padding: 80px 0; margin-bottom: 60px;">
     <div class="container">
         <div class="row align-items-center">
@@ -11,7 +9,7 @@
                     Find Your Perfect Space in Cebu
                 </h1>
                 <p class="lead mb-4 animate-fadeInUp" style="animation-delay: 0.2s;">
-                    Discover thousands of rooms, apartments, condos, and dorms in Cebu City and Lapu-Lapu City. Your next home is just a click away.
+                    Discover thousands of rooms, apartments, condos, and dorms across Cebu. Your next home is just a click away.
                 </p>
                 <div class="d-flex gap-3 animate-fadeInUp" style="animation-delay: 0.3s;">
                     <a href="{% url 'listing_list' %}" class="btn btn-light btn-lg px-4">
@@ -25,13 +23,12 @@
                 </div>
             </div>
             <div class="col-lg-6 mt-4 mt-lg-0 animate-fadeInUp" style="animation-delay: 0.2s;">
-                <img src="https://res.cloudinary.com/demo/image/upload/v1/sample" alt="Hero" class="img-fluid rounded-4 shadow-lg" style="max-height: 400px; width: 100%; object-fit: cover;">
+                <img src="/static/images/hero-placeholder.jpg" alt="Hero" class="img-fluid rounded-4 shadow-lg" style="max-height: 400px; width: 100%; object-fit: cover;" onerror="this.src='https://placehold.co/800x600/0f766e/white?text=Cebu+Room+Rental'">
             </div>
         </div>
     </div>
 </section>
 
-<!-- Stats Section -->
 <section class="stats-section py-5 bg-white">
     <div class="container">
         <div class="row text-center">
@@ -67,7 +64,6 @@
     </div>
 </section>
 
-<!-- Featured Listings -->
 <div class="container">
     <div class="text-center mb-5">
         <h2 class="fw-bold">Featured Properties</h2>
@@ -78,9 +74,9 @@
     <div class="row g-4">
         {% for listing in listings %}
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm hover-shadow transition-all" style="transition: transform 0.3s ease, box-shadow 0.3s ease; border-radius: 1rem; overflow: hidden;">
+                <div class="card h-100 border-0 shadow-sm hover-shadow transition-all" style="border-radius: 1rem; overflow: hidden;">
                     {% if listing.image1 %}
-                        {% cloudinary listing.image1 width=400 height=250 crop="fill" class="card-img-top" style="height: 220px; object-fit: cover;" %}
+                        <img src="{{ listing.image1.url }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="{{ listing.title }}">
                     {% else %}
                         <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 220px;">
                             <i class="fas fa-home fa-4x text-white-50"></i>
@@ -88,7 +84,12 @@
                     {% endif %}
                     <div class="position-absolute top-0 end-0 m-3">
                         <span class="badge bg-white text-dark px-3 py-2 rounded-pill shadow-sm">
-                            <i class="fas fa-tag text-teal"></i> ₱{{ listing.price }}/night
+                            <i class="fas fa-tag text-teal"></i> 
+                            {% if listing.daily_price %}
+                                ₱{{ listing.daily_price }}/night
+                            {% elif listing.monthly_price %}
+                                ₱{{ listing.monthly_price }}/month
+                            {% endif %}
                         </span>
                     </div>
                     <div class="card-body">
@@ -101,11 +102,7 @@
                         <p class="text-muted small mb-2">
                             <i class="fas fa-map-marker-alt text-teal me-1"></i> {{ listing.get_location_display }}
                         </p>
-                        <p class="card-text text-muted small mb-3">
-                            <i class="fas fa-users me-1"></i> {{ listing.max_occupants }} guests • 
-                            <i class="fas fa-bed ms-2 me-1"></i> 1 bedroom
-                        </p>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center mt-3">
                             <div class="rating">
                                 <i class="fas fa-star text-warning"></i>
                                 <i class="fas fa-star text-warning"></i>
@@ -135,7 +132,6 @@
     </div>
 </div>
 
-<!-- CTA Section -->
 <section class="cta-section mt-5 py-5" style="background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);">
     <div class="container">
         <div class="row align-items-center">

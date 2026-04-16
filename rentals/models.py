@@ -1,4 +1,3 @@
-# rentals/models.py
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -16,6 +15,11 @@ class Listing(models.Model):
     LOCATIONS = [
         ('cebu_city', 'Cebu City'),
         ('lapulapu', 'Lapu-Lapu City'),
+        ('mandaue', 'Mandaue City'),
+        ('talisay', 'Talisay City'),
+        ('naga', 'Naga City'),
+        ('carcar', 'Carcar City'),
+        ('toledo', 'Toledo City'),
     ]
     
     # Basic info
@@ -24,20 +28,17 @@ class Listing(models.Model):
     property_type = models.CharField(max_length=20, choices=PROPERTY_TYPES)
     location = models.CharField(max_length=20, choices=LOCATIONS)
     address = models.CharField(max_length=500)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    daily_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    monthly_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     max_occupants = models.IntegerField()
     
     # Amenities (simple text)
     amenities = models.TextField(blank=True, help_text="List amenities separated by commas")
     
-    # Images
+    # Images - LOCAL STORAGE (saved in media/listings/ folder)
     image1 = models.ImageField(upload_to='listings/', blank=True, null=True)
     image2 = models.ImageField(upload_to='listings/', blank=True, null=True)
     image3 = models.ImageField(upload_to='listings/', blank=True, null=True)
-    
-    # Map coordinates (default to Cebu City center)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, default=10.3157)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, default=123.8854)
     
     # Owner
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
@@ -51,6 +52,24 @@ class Listing(models.Model):
         if self.amenities:
             return [a.strip() for a in self.amenities.split(',')]
         return []
+    
+    def get_lowest_price(self):
+        if self.daily_price and self.monthly_price:
+            return min(self.daily_price, self.monthly_price)
+        elif self.daily_price:
+            return self.daily_price
+        elif self.monthly_price:
+            return self.monthly_price
+        return 0
+    
+    def get_price_unit(self):
+        if self.daily_price and self.monthly_price:
+            return "lowest"
+        elif self.daily_price:
+            return "night"
+        elif self.monthly_price:
+            return "month"
+        return ""
 
 class Booking(models.Model):
     STATUS_CHOICES = [

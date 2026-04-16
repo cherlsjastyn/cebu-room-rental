@@ -15,28 +15,11 @@
                         {% csrf_token %}
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Username</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0 rounded-start-pill">
-                                    <i class="fas fa-user text-teal"></i>
-                                </span>
-                                <input type="text" name="username" class="form-control rounded-end-pill" placeholder="Enter your username" required>
-                            </div>
+                            <input type="text" name="username" class="form-control rounded-pill" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Password</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0 rounded-start-pill">
-                                    <i class="fas fa-lock text-teal"></i>
-                                </span>
-                                <input type="password" name="password" class="form-control rounded-end-pill" placeholder="Enter your password" required>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="remember">
-                                <label class="form-check-label text-muted" for="remember">Remember me</label>
-                            </div>
-                            <a href="#" class="text-teal text-decoration-none small">Forgot password?</a>
+                            <input type="password" name="password" class="form-control rounded-pill" required>
                         </div>
                         <button type="submit" class="btn btn-teal w-100 py-2 rounded-pill">
                             <i class="fas fa-sign-in-alt me-2"></i> Login
@@ -53,7 +36,6 @@
         </div>
     </div>
 </div>
-
 <style>
     .text-teal { color: #0f766e; }
     .btn-teal {
@@ -61,6 +43,8 @@
         color: white;
         border: none;
         transition: all 0.3s ease;
+        padding: 12px;
+        font-weight: 600;
     }
     .btn-teal:hover {
         background: #0d9488;

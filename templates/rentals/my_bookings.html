@@ -52,7 +52,7 @@
                                     <h5 class="fw-bold text-teal mb-0">₱{{ booking.total_price }}</h5>
                                 </div>
                                 {% if user.profile.user_type == 'tenant' and booking.status == 'pending' %}
-                                    <form method="POST" action="{% url 'update_booking' booking.id %}" class="d-inline">
+                                    <form method="POST" action="{% url 'update_booking_status' booking.id %}" class="d-inline">
                                         {% csrf_token %}
                                         <div class="btn-group">
                                             <button type="submit" name="status" value="confirmed" class="btn btn-sm btn-success rounded-pill me-1">
@@ -64,7 +64,7 @@
                                         </div>
                                     </form>
                                 {% elif user.profile.user_type == 'buyer' and booking.status == 'pending' %}
-                                    <form method="POST" action="{% url 'update_booking' booking.id %}" class="d-inline">
+                                    <form method="POST" action="{% url 'update_booking_status' booking.id %}" class="d-inline">
                                         {% csrf_token %}
                                         <button type="submit" name="status" value="cancelled" class="btn btn-sm btn-outline-danger rounded-pill">
                                             <i class="fas fa-times"></i> Cancel Request

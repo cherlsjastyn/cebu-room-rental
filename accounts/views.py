@@ -1,20 +1,23 @@
-# accounts/views.py
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, authenticate
-from .forms import RegistrationForm, UserUpdateForm, ProfileUpdateForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.models import User
+from .forms import UserRegistrationForm, UserProfileForm
 
 def register(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, f'Welcome {user.username}! You are now registered.')
-            return redirect('home')
+            form.save()
+            messages.success(request, 'Account created successfully! Please login.')
+            return redirect('login')
+        else:
+            for error in form.errors.values():
+                messages.error(request, error)
     else:
-        form = RegistrationForm()
+        form = UserRegistrationForm()
+    
     return render(request, 'accounts/register.html', {'form': form})
 
 def user_login(request):
@@ -22,38 +25,33 @@ def user_login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        
         if user is not None:
-            login(request, user)
-            messages.success(request, f'Welcome back {username}!')
+            auth_login(request, user)
+            messages.success(request, f'Welcome back, {username}!')
             return redirect('home')
         else:
             messages.error(request, 'Invalid username or password.')
-    
     return render(request, 'accounts/login.html')
 
 def user_logout(request):
-    logout(request)
-    messages.info(request, 'You have been logged out.')
+    auth_logout(request)
+    messages.success(request, 'You have been logged out.')
     return redirect('home')
 
 @login_required
 def profile(request):
     if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, 'Your profile has been updated!')
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            # Also update email if provided
+            email = request.POST.get('email')
+            if email:
+                request.user.email = email
+                request.user.save()
+            messages.success(request, 'Profile updated successfully!')
             return redirect('profile')
     else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+        form = UserProfileForm(instance=request.user.profile)
     
-    context = {
-        'u_form': u_form,
-        'p_form': p_form,
-    }
-    return render(request, 'accounts/profile.html', context)
+    return render(request, 'accounts/profile.html', {'form': form, 'user': request.user})
