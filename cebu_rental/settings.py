@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'cebu_rental.wsgi.application'
 
 # Database - Fixed: Removed brackets from password
 DATABASES = {
-    'default': dj_database_url.config(default='postgresql://postgres:jastininiw09682232315@db.omrjxsowgdjcsyduodux.supabase.co:5432/postgres')
+    'default': dj_database_url.config(default='postgresql://postgres:jastininiw09682232315@db.omrjxsowgdjcsyduodux.supabase.co:5432/postgres?pgbouncer=true')
 }
 
 
