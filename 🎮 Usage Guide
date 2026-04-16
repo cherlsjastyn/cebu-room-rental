@@ -1,58 +1,73 @@
-As a Tenant (Property Owner)
-Register as a Tenant when creating your account
+User Guide
 
-Create a listing by clicking "Add Listing" in the navigation bar
+Getting Started
+Creating an Account
+•	Click the Sign Up button in the top navigation bar
+•	Fill in your username, email address, and password
+•	Select your account type: Choose Tenant if you plan to list properties for rent, or choose Buyer if you are looking to rent a property
+•	Click Register - you will be automatically logged in after registration
 
-Fill in property details:
+Logging In
+•	Click Login in the navigation bar
+•	Enter your username and password
+•	Click Login to access your account
 
-Title and description
+For Tenants (Property Owners)
+•	Listing a Property
+•	Click Add Listing in the navigation menu
+•	Fill in all required property details including title, description, property type from the dropdown menu, location, full address, price per night, and maximum number of occupants
+•	List amenities separated by commas such as WiFi, Aircon, Parking, and Kitchen
+•	Upload up to three property images by clicking the image fields
+•	Click Create Listing to publish your property
+•	Managing Your Listings
+•	Click My Listings to view all your properties
+•	Click Edit to modify any listing details
+•	Click Delete to remove a listing permanently
+•	Responding to Booking Requests
+•	Go to the Bookings page to see all pending requests
+•	Click Accept to confirm the booking
+•	Click Decline to cancel the booking
+•	The buyer will be notified of your decision
+•	Communicating with Buyers
+•	Use the Messages page to view all conversations
+•	Click on any conversation to read messages
+•	Type your reply and click Send Message
 
-Property type (Boarding House, Apartment, etc.)
+For Buyers (Renters)
+•	Finding Properties
+•	Click Explore in the navigation menu to see all available listings
+•	Use the sidebar filters to narrow down your search by location, property type, price range, or maximum number of occupants
+•	Click Map View to see all properties displayed on an interactive map
+•	Click any map marker to view property details
+•	Booking a Room
+•	Click View Details on any property you like
+•	Click the Book This Room button
+•	Select your check-in and check-out dates using the date picker
+•	Enter the number of guests
+•	Click Confirm Booking to send your request to the property owner
+•	Tracking Your Bookings
+•	Go to the Bookings page to see all your booking requests
+•	Pending status means awaiting owner confirmation
+•	Confirmed status means your booking is approved
+•	Cancelled status means the request was denied or withdrawn
+•	Communicating with Property Owners
+•	Scroll to the Messages section on any property detail page
+•	Type your message in the text box
+•	Click Send Message - the owner will receive your message and can reply
+•	Access all conversations from the Messages page in the navigation bar
 
-Location (Cebu City or Lapu-Lapu City)
-
-Price per night
-
-Maximum occupants
-
-Amenities (comma-separated)
-
-Upload up to 3 images
-
-Manage your listings from "My Listings" page (Edit/Delete)
-
-Respond to booking requests from the "Bookings" page
-
-Reply to buyer messages from the "Messages" page
-
-As a Buyer (Renter)
-Register as a Buyer when creating your account
-
-Browse listings from the "Listings" page
-
-Filter results by:
-
-Location
-
-Property type
-
-Price range
-
-Number of occupants
-
-View on map by clicking the "Map View" tab
-
-Book a room by clicking "Book This Room" on any listing
-
-Message the tenant using the messaging section on the listing page
-
-Track your bookings from the "Bookings" page
-
-Cancel pending bookings if needed
-
-As Admin
-Go to /admin and log in with superuser credentials
-
-Manage all users, listings, bookings, and messages
-
-Approve or remove content as needed
+For All Users
+•	Managing Your Profile
+•	Click your username in the top right corner
+•	Select My Profile from the dropdown menu
+•	Upload or update your profile picture
+•	Add or change your phone number
+•	Click Update Profile to save your changes
+•	Viewing Messages
+•	Click Messages in the navigation bar to see all conversations
+•	Unread messages display a red badge with the count of new messages
+•	Click any conversation to read and reply
+•	Logging Out
+•	Click your username in the top right corner
+•	Select Logout from the dropdown menu
+•	Your session will end securely

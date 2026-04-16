@@ -1,28 +1,33 @@
 cebu-room-rental/
-├── cebu_rental/              # Project configuration
+├── cebu_rental/                      # Project configuration
+│   ├── __pycache__/                  # Python cache files (auto-generated)
 │   ├── __init__.py
-│   ├── settings.py           # Django settings
-│   ├── urls.py               # Main URL routing
-│   └── wsgi.py               # WSGI configuration
-├── rentals/                  # Main app for listings
-│   ├── migrations/           # Database migrations
+│   ├── asgi.py                       # ASGI configuration
+│   ├── settings.py                   # Django settings
+│   ├── urls.py                       # Main URL routing
+│   └── wsgi.py                       # WSGI configuration
+├── rentals/                          # Main app for listings
+│   ├── __pycache__/                  # Python cache files (auto-generated)
+│   ├── migrations/                   # Database migrations
+│   │   └── __pycache__/              # Migration cache files
 │   ├── __init__.py
-│   ├── admin.py              # Admin panel config
-│   ├── forms.py              # Forms for listings and bookings
-│   ├── models.py             # Listing, Booking, Message models
-│   ├── urls.py               # App URL routing
-│   └── views.py              # View logic
-├── accounts/                 # User accounts app
-│   ├── migrations/           # Database migrations
+│   ├── admin.py                      # Admin panel config
+│   ├── forms.py                      # Forms for listings and bookings
+│   ├── models.py                     # Listing, Booking, Message models
+│   ├── urls.py                       # App URL routing
+│   └── views.py                      # View logic
+├── accounts/                         # User accounts app
+│   ├── __pycache__/                  # Python cache files (auto-generated)
+│   ├── migrations/                   # Database migrations
+│   │   └── __pycache__/              # Migration cache files
 │   ├── __init__.py
-│   ├── admin.py              # Admin panel config
-│   ├── forms.py              # Registration and profile forms
-│   ├── models.py             # Profile model
-│   ├── urls.py               # App URL routing
-│   └── views.py              # Login, register, profile views
-├── templates/                # HTML templates
-│   ├── base.html             # Base template
-│   ├── rentals/              # Rentals app templates
+│   ├── admin.py                      # Admin panel config
+│   ├── forms.py                      # Registration and profile forms
+│   ├── models.py                     # Profile model
+│   ├── urls.py                       # App URL routing
+│   └── views.py                      # Login, register, profile views
+├── templates/                        # HTML templates
+│   ├── rentals/                      # Rentals app templates
 │   │   ├── home.html
 │   │   ├── listing_list.html
 │   │   ├── listing_detail.html
@@ -32,15 +37,20 @@ cebu-room-rental/
 │   │   ├── messages.html
 │   │   ├── conversation.html
 │   │   └── map.html
-│   └── accounts/             # Accounts app templates
+│   └── accounts/                     # Accounts app templates
 │       ├── register.html
 │       ├── login.html
 │       └── profile.html
-├── static/                   # Static files (CSS, JS)
+├── static/                           # Static files (CSS, JS)
 │   └── css/
 │       └── custom.css
-├── media/                    # User uploaded images (created automatically)
-├── db.sqlite3                # SQLite database
-├── manage.py                 # Django management script
-├── requirements.txt          # Python dependencies
-└── README.md                 # This file
+├── staticfiles/                      # Collected static files for production
+├── env/                              # Python virtual environment
+├── db.sqlite3                        # SQLite database (local development)
+├── manage.py                         # Django management script
+├── Procfile                          # Render/Vercel deployment configuration
+├── requirements.txt                  # Python dependencies
+├── vercel.json                       # Vercel deployment configuration
+├── README.md                         # Project documentation
+├── 🎮 Usage Guide                     # Usage documentation file
+└── 📁 Project Structure              # Structure documentation file
