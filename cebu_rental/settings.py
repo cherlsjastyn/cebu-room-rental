@@ -82,9 +82,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cebu_rental.wsgi.application'
 
 
-# Database - Fixed: Removed brackets from password
+# Database
 DATABASES = {
-    'default': dj_database_url.config(default='postgresql://postgres:jastininiw09682232315@db.omrjxsowgdjcsyduodux.supabase.co:5432/postgres?pgbouncer=true')
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
