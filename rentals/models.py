@@ -101,3 +101,45 @@ class Message(models.Model):
     
     def __str__(self):
         return f"Message from {self.sender.username} to {self.receiver.username}"
+
+# ========== NEW: REVIEW SYSTEM MODELS ==========
+
+class ListingReview(models.Model):
+    RATING_CHOICES = [
+        (1, '1 Star - Poor'),
+        (2, '2 Stars - Fair'),
+        (3, '3 Stars - Good'),
+        (4, '4 Stars - Very Good'),
+        (5, '5 Stars - Excellent'),
+    ]
+    
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listing_reviews')
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ['listing', 'user']
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.user.username} rated {self.listing.title}: {self.rating} stars"
+
+class WebsiteFeedback(models.Model):
+    RATING_CHOICES = [
+        (1, '1 Star - Poor'),
+        (2, '2 Stars - Fair'),
+        (3, '3 Stars - Good'),
+        (4, '4 Stars - Very Good'),
+        (5, '5 Stars - Excellent'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedbacks')
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    feedback = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user.username} rated: {self.rating} stars on {self.created_at.date()}"

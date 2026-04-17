@@ -16,4 +16,8 @@ urlpatterns = [
     path('map/', views.map_view, name='map'),
     path('get-listings-json/', views.get_listings_json, name='get_listings_json'),
     path('api/listings/', views.get_listings_json, name='api_listings'),
+    # NEW: Review System URLs
+    path('review/listing/<int:pk>/', views.add_listing_review, name='add_listing_review'),
+    path('review/delete/<int:pk>/', views.delete_listing_review, name='delete_listing_review'),
+    path('feedback/', views.website_feedback, name='website_feedback'),
 ]

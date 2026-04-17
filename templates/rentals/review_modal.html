@@ -1,0 +1,106 @@
+<div class="modal fade" id="reviewModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">
+                    {% if existing_review %}
+                        Edit Your Review
+                    {% else %}
+                        Review {{ listing.title }}
+                    {% endif %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{% url 'add_listing_review' listing.id %}">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <!-- Hidden field for rating (will be set by JavaScript) -->
+                    <input type="hidden" name="rating" id="review_rating" value="{% if existing_review %}{{ existing_review.rating }}{% else %}5{% endif %}">
+                    
+                    <!-- Star Rating Widget -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Your Rating</label>
+                        <div class="star-rating" id="reviewStarRating">
+                            <input type="radio" id="review_star5" name="review_star" value="5" {% if existing_review and existing_review.rating == 5 %}checked{% endif %}>
+                            <label for="review_star5" title="5 stars">★</label>
+                            <input type="radio" id="review_star4" name="review_star" value="4" {% if existing_review and existing_review.rating == 4 %}checked{% endif %}>
+                            <label for="review_star4" title="4 stars">★</label>
+                            <input type="radio" id="review_star3" name="review_star" value="3" {% if existing_review and existing_review.rating == 3 %}checked{% endif %}>
+                            <label for="review_star3" title="3 stars">★</label>
+                            <input type="radio" id="review_star2" name="review_star" value="2" {% if existing_review and existing_review.rating == 2 %}checked{% endif %}>
+                            <label for="review_star2" title="2 stars">★</label>
+                            <input type="radio" id="review_star1" name="review_star" value="1" {% if existing_review and existing_review.rating == 1 %}checked{% endif %}>
+                            <label for="review_star1" title="1 star">★</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Comment Field -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Your Review</label>
+                        <textarea name="comment" rows="4" class="form-control" placeholder="Share your experience with this property...">{% if existing_review %}{{ existing_review.comment }}{% endif %}</textarea>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <small><i class="fas fa-info-circle me-1"></i> Only users who have completed a booking can review.</small>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-teal rounded-pill px-4">
+                        <i class="fas fa-star me-2"></i> Submit Review
+                    </button>
+                    {% if existing_review %}
+                        <a href="{% url 'delete_listing_review' existing_review.id %}" class="btn btn-outline-danger rounded-pill px-4" onclick="return confirm('Delete your review?')">
+                            <i class="fas fa-trash me-2"></i> Delete
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Update hidden rating field when stars are clicked
+    const reviewStars = document.querySelectorAll('#reviewStarRating input');
+    const reviewRatingHidden = document.getElementById('review_rating');
+    reviewStars.forEach(star => {
+        star.addEventListener('change', function() {
+            reviewRatingHidden.value = this.value;
+        });
+    });
+</script>
+
+<style>
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+    .star-rating input {
+        display: none;
+    }
+    .star-rating label {
+        font-size: 30px;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
+        color: #ffc107;
+    }
+    .btn-teal {
+        background: #0f766e;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-teal:hover {
+        background: #0d9488;
+        transform: translateY(-2px);
+    }
+</style>

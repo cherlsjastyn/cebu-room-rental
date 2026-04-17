@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.db.models import Q
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from .models import Listing, Booking, Message
-from .forms import ListingForm, BookingForm, MessageForm
+from .models import Listing, Booking, Message, ListingReview, WebsiteFeedback
+from .forms import ListingForm, BookingForm, MessageForm, ListingReviewForm, WebsiteFeedbackForm
 from datetime import datetime, date
 from decimal import Decimal
 
@@ -276,3 +276,79 @@ def get_listings_json(request):
         'id', 'title', 'daily_price', 'monthly_price', 'property_type', 'location'
     )
     return JsonResponse(list(listings), safe=False)
+
+# ========== NEW: REVIEW SYSTEM VIEWS ==========
+
+@login_required
+def add_listing_review(request, pk):
+    listing = get_object_or_404(Listing, pk=pk)
+    
+    # Check if user has completed a booking for this listing
+    has_booking = Booking.objects.filter(
+        listing=listing, 
+        buyer=request.user, 
+        status='completed'
+    ).exists()
+    
+    if not has_booking:
+        messages.error(request, 'You can only review properties you have booked and completed.')
+        return redirect('listing_detail', pk=pk)
+    
+    # Check if user already reviewed
+    existing_review = ListingReview.objects.filter(listing=listing, user=request.user).first()
+    
+    if request.method == 'POST':
+        if existing_review:
+            form = ListingReviewForm(request.POST, instance=existing_review)
+        else:
+            form = ListingReviewForm(request.POST)
+        
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.listing = listing
+            review.user = request.user
+            review.save()
+            messages.success(request, 'Thank you for your review!')
+            return redirect('listing_detail', pk=pk)
+    else:
+        form = ListingReviewForm(instance=existing_review)
+    
+    context = {
+        'listing': listing,
+        'form': form,
+        'existing_review': existing_review,
+    }
+    return render(request, 'rentals/review_modal.html', context)
+
+@login_required
+def delete_listing_review(request, pk):
+    review = get_object_or_404(ListingReview, pk=pk, user=request.user)
+    listing_id = review.listing.id
+    review.delete()
+    messages.success(request, 'Your review has been deleted.')
+    return redirect('listing_detail', pk=listing_id)
+
+@login_required
+def website_feedback(request):
+    existing_feedback = WebsiteFeedback.objects.filter(user=request.user).first()
+    
+    if request.method == 'POST':
+        if existing_feedback:
+            form = WebsiteFeedbackForm(request.POST, instance=existing_feedback)
+        else:
+            form = WebsiteFeedbackForm(request.POST)
+        
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.user = request.user
+            feedback.save()
+            messages.success(request, 'Thank you for your feedback!')
+            return redirect('home')
+    else:
+        form = WebsiteFeedbackForm(instance=existing_feedback)
+    
+    context = {
+        'form': form,
+        'existing_feedback': existing_feedback,
+    }
+    return render(request, 'rentals/feedback_modal.html', context)

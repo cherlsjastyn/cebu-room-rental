@@ -16,3 +16,19 @@ class BookingAdmin(admin.ModelAdmin):
 class MessageAdmin(admin.ModelAdmin):
     list_display = ['sender', 'receiver', 'listing', 'created_at', 'is_read']
     list_filter = ['is_read', 'created_at']
+
+# ========== NEW: REVIEW SYSTEM ADMIN ==========
+
+from .models import ListingReview, WebsiteFeedback
+
+@admin.register(ListingReview)
+class ListingReviewAdmin(admin.ModelAdmin):
+    list_display = ['listing', 'user', 'rating', 'created_at']
+    list_filter = ['rating', 'created_at']
+    search_fields = ['listing__title', 'user__username']
+
+@admin.register(WebsiteFeedback)
+class WebsiteFeedbackAdmin(admin.ModelAdmin):
+    list_display = ['user', 'rating', 'created_at']
+    list_filter = ['rating', 'created_at']
+    search_fields = ['user__username']

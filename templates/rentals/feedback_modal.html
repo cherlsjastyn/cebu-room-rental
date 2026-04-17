@@ -1,0 +1,97 @@
+<div class="modal fade" id="feedbackModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-comment-dots text-teal me-2"></i>
+                    Share Your Experience
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{% url 'website_feedback' %}">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <!-- Hidden field for rating -->
+                    <input type="hidden" name="rating" id="feedback_rating" value="5">
+                    
+                    <!-- Star Rating Widget -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Rate Your Overall Experience</label>
+                        <div class="star-rating" id="feedbackStarRating">
+                            <input type="radio" id="feedback_star5" name="feedback_star" value="5" checked>
+                            <label for="feedback_star5" title="5 stars">★</label>
+                            <input type="radio" id="feedback_star4" name="feedback_star" value="4">
+                            <label for="feedback_star4" title="4 stars">★</label>
+                            <input type="radio" id="feedback_star3" name="feedback_star" value="3">
+                            <label for="feedback_star3" title="3 stars">★</label>
+                            <input type="radio" id="feedback_star2" name="feedback_star" value="2">
+                            <label for="feedback_star2" title="2 stars">★</label>
+                            <input type="radio" id="feedback_star1" name="feedback_star" value="1">
+                            <label for="feedback_star1" title="1 star">★</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Feedback Field -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Your Feedback</label>
+                        <textarea name="feedback" rows="4" class="form-control" placeholder="Tell us about your experience with CebuRoomRental..."></textarea>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <small><i class="fas fa-info-circle me-1"></i> Your feedback helps us improve CebuRoomRental!</small>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-teal rounded-pill px-4">
+                        <i class="fas fa-paper-plane me-2"></i> Submit Feedback
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const feedbackStars = document.querySelectorAll('#feedbackStarRating input');
+    const feedbackRatingHidden = document.getElementById('feedback_rating');
+    feedbackStars.forEach(star => {
+        star.addEventListener('change', function() {
+            feedbackRatingHidden.value = this.value;
+        });
+    });
+</script>
+
+<style>
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+    .star-rating input {
+        display: none;
+    }
+    .star-rating label {
+        font-size: 30px;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
+        color: #ffc107;
+    }
+    .btn-teal {
+        background: #0f766e;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-teal:hover {
+        background: #0d9488;
+        transform: translateY(-2px);
+    }
+</style>

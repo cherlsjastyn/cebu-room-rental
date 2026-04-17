@@ -200,6 +200,12 @@
                                 {% endif %}
                             </a>
                         </li>
+                        <!-- NEW: Feedback Button -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                                <i class="fas fa-comment-dots"></i> Feedback
+                            </a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user-circle"></i> {{ user.username }}
@@ -313,6 +319,8 @@
             observer.observe(el);
         });
     </script>
+    <!-- NEW: Include Feedback Modal -->
+    {% include 'rentals/feedback_modal.html' %}
     {% block extra_js %}{% endblock %}
 </body>
 </html>
