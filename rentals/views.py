@@ -28,10 +28,18 @@ def listing_list(request):
         listings = listings.filter(property_type=property_type)
     if occupants and occupants.isdigit():
         listings = listings.filter(max_occupants__gte=int(occupants))
+    
+    # FIXED: Filter by daily_price OR monthly_price instead of price
     if min_price and min_price.isdigit():
-        listings = listings.filter(price__gte=float(min_price))
+        min_val = float(min_price)
+        listings = listings.filter(
+            Q(daily_price__gte=min_val) | Q(monthly_price__gte=min_val)
+        )
     if max_price and max_price.isdigit():
-        listings = listings.filter(price__lte=float(max_price))
+        max_val = float(max_price)
+        listings = listings.filter(
+            Q(daily_price__lte=max_val) | Q(monthly_price__lte=max_val)
+        )
     
     context = {
         'listings': listings,
