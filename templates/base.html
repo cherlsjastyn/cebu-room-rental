@@ -43,6 +43,7 @@
             margin: 0 0.25rem;
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
+            position: relative;
         }
         
         .nav-link:hover {
@@ -52,6 +53,25 @@
         
         .nav-link i {
             margin-right: 0.5rem;
+        }
+        
+        .notification-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            animation: pulse 1s infinite;
+            margin-left: 0.25rem;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
         
         .btn-primary-custom {
@@ -167,11 +187,17 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'my_bookings' %}">
                                 <i class="fas fa-calendar-check"></i> Bookings
+                                {% if booking_notification_count > 0 %}
+                                    <span class="badge bg-danger rounded-pill notification-badge">{{ booking_notification_count }}</span>
+                                {% endif %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'messages' %}">
                                 <i class="fas fa-envelope"></i> Messages
+                                {% if message_notification_count > 0 %}
+                                    <span class="badge bg-danger rounded-pill notification-badge">{{ message_notification_count }}</span>
+                                {% endif %}
                             </a>
                         </li>
                         <li class="nav-item dropdown">

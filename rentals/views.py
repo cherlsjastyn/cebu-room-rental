@@ -29,7 +29,6 @@ def listing_list(request):
     if occupants and occupants.isdigit():
         listings = listings.filter(max_occupants__gte=int(occupants))
     
-    # FIXED: Filter by daily_price OR monthly_price instead of price
     if min_price and min_price.isdigit():
         min_val = float(min_price)
         listings = listings.filter(
@@ -89,7 +88,7 @@ def listing_detail(request, pk):
     else:
         form = BookingForm()
     
-    # Handle message submission - FIXED
+    # Handle message submission
     if request.method == 'POST':
         if 'message' in request.POST:
             message_text = request.POST.get('message', '').strip()
@@ -214,6 +213,7 @@ def update_booking_status(request, pk):
 
 @login_required
 def messages_view(request):
+    # DO NOT mark messages as read here - let the badge stay until user opens conversation
     conversations = {}
     
     all_messages = Message.objects.filter(
