@@ -352,3 +352,21 @@ def website_feedback(request):
         'existing_feedback': existing_feedback,
     }
     return render(request, 'rentals/feedback_modal.html', context)
+
+@login_required
+def delete_booking(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+    
+    # Allow deletion only if the booking is confirmed or cancelled
+    if booking.status not in ['confirmed', 'cancelled']:
+        messages.error(request, 'Only confirmed or cancelled bookings can be deleted.')
+        return redirect('my_bookings')
+    
+    # Allow deletion only if the user is the buyer or the listing owner
+    if request.user != booking.buyer and request.user != booking.listing.owner:
+        messages.error(request, 'You are not authorized to delete this booking.')
+        return redirect('my_bookings')
+    
+    booking.delete()
+    messages.success(request, 'Booking record deleted successfully.')
+    return redirect('my_bookings')

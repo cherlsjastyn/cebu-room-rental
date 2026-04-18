@@ -51,26 +51,35 @@
                                     <small class="text-muted">Total Price</small>
                                     <h5 class="fw-bold text-teal mb-0">₱{{ booking.total_price }}</h5>
                                 </div>
-                                {% if user.profile.user_type == 'tenant' and booking.status == 'pending' %}
-                                    <form method="POST" action="{% url 'update_booking_status' booking.id %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <div class="btn-group">
-                                            <button type="submit" name="status" value="confirmed" class="btn btn-sm btn-success rounded-pill me-1">
-                                                <i class="fas fa-check"></i> Accept
+                                <div>
+                                    {% if user.profile.user_type == 'tenant' and booking.status == 'pending' %}
+                                        <form method="POST" action="{% url 'update_booking_status' booking.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <div class="btn-group">
+                                                <button type="submit" name="status" value="confirmed" class="btn btn-sm btn-success rounded-pill me-1">
+                                                    <i class="fas fa-check"></i> Accept
+                                                </button>
+                                                <button type="submit" name="status" value="cancelled" class="btn btn-sm btn-danger rounded-pill">
+                                                    <i class="fas fa-times"></i> Decline
+                                                </button>
+                                            </div>
+                                        </form>
+                                    {% elif user.profile.user_type == 'buyer' and booking.status == 'pending' %}
+                                        <form method="POST" action="{% url 'update_booking_status' booking.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" name="status" value="cancelled" class="btn btn-sm btn-outline-danger rounded-pill">
+                                                <i class="fas fa-times"></i> Cancel Request
                                             </button>
-                                            <button type="submit" name="status" value="cancelled" class="btn btn-sm btn-danger rounded-pill">
-                                                <i class="fas fa-times"></i> Decline
+                                        </form>
+                                    {% elif booking.status == 'confirmed' or booking.status == 'cancelled' %}
+                                        <form method="POST" action="{% url 'delete_booking' booking.id %}" class="d-inline" onsubmit="return confirm('Delete this booking record permanently?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
+                                                <i class="fas fa-trash"></i> Delete
                                             </button>
-                                        </div>
-                                    </form>
-                                {% elif user.profile.user_type == 'buyer' and booking.status == 'pending' %}
-                                    <form method="POST" action="{% url 'update_booking_status' booking.id %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" name="status" value="cancelled" class="btn btn-sm btn-outline-danger rounded-pill">
-                                            <i class="fas fa-times"></i> Cancel Request
-                                        </button>
-                                    </form>
-                                {% endif %}
+                                        </form>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>

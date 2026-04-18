@@ -11,12 +11,13 @@ urlpatterns = [
     path('delete/<int:pk>/', views.delete_listing, name='delete_listing'),
     path('my-bookings/', views.my_bookings, name='my_bookings'),
     path('update-booking/<int:pk>/', views.update_booking_status, name='update_booking_status'),
+    path('delete-booking/<int:pk>/', views.delete_booking, name='delete_booking'),  # NEW
     path('messages/', views.messages_view, name='messages'),
     path('conversation/<int:user_id>/<int:listing_id>/', views.conversation, name='conversation'),
     path('map/', views.map_view, name='map'),
     path('get-listings-json/', views.get_listings_json, name='get_listings_json'),
     path('api/listings/', views.get_listings_json, name='api_listings'),
-    # NEW: Review System URLs
+    # Review System URLs
     path('review/listing/<int:pk>/', views.add_listing_review, name='add_listing_review'),
     path('review/delete/<int:pk>/', views.delete_listing_review, name='delete_listing_review'),
     path('feedback/', views.website_feedback, name='website_feedback'),
